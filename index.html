@@ -3,25 +3,149 @@
     <head>
         <meta charset="utf-8">
         <title>TETRIS</title>
-        <link rel="/src/main.css">
+        <link rel="stylesheet" href="src/main.css">
     </head>
 
-    <body>
+    <body class="theme-color-basic mino-color-basic">
+        <h1 class="title">TETRIS</h1>
 
         <div class="container">
-            <div class="container_left">
 
+            <div class="container_column is-s bg-column">
+                <h2 class="container_column_title color-headText">HOLD</h2>
+                <canvas id="hold" width="380" height="380" class="container_column_canvas"></canvas>
             </div>
 
-            <div class="container_center">
+            <div class="container_column is-l bg-column">
+                <h2 class="container_column_title color-headText">SCORE</h2>
+                <p id="score" class="container_column_score color-text">0</p>
+            </div>
 
+            <div class="container_column is-l bg-column">
+                <h2 class="container_column_title color-headText">TIME</h2>
+                <p class="container_column_time color-text">
+                    <span id="timeH">00</span>:<span id="timeM">00</span>:<span id="timeS">00</span>
+                </p>
+            </div>
+
+            <div class="container_column is-p bg-column">
+                <h2 class="container_column_title is-hidden">CONTROLLER LEFT</h2>
+
+                <h3 class="subTitle color-headText">HOLD</h3>
+                <button id="btnHold" class="btn is-circle bg-button color-text">S</button>
+
+                <h3 class="subTitle color-headText">TURN</h3>
+                <div class="container_column_turn">
+                    <button id="btnTurnL" class="btn is-circle is-left bg-button color-text">Z
+                        <svg class="btn_icon" width="97" height="96" viewBox="0 0 97 96" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.00032 47.4948C6.08929 24.4235 25.0295 5.91177 48.1609 6.00032C71.1845 6.08845 89.7343 24.4956 90.0002 47.5177L90.0349 50.5175L96.0345 50.4482L95.9998 47.4484C95.696 21.1488 74.4851 0.101045 48.1839 0.000360638C21.7991 -0.100643 0.102348 21.0268 0.000366211 47.4717C-0.0801086 68.3383 13.377 86.15 32.0098 92.665C37.0833 94.4389 42.5397 95.3756 48.2071 95.3104L56.2657 95.2175L30 73.0407V85.3681C15.7999 78.674 5.93596 64.1853 6.00032 47.4948Z"/></svg>
+                    </button>
+                    <button id="btnTurnR" class="btn is-circle is-right bg-button color-text">X
+                        <svg class="btn_icon" width="97" height="96" viewBox="0 0 97 96" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M90.0341 47.4948C89.9452 24.4235 71.0049 5.91177 47.8735 6.00032C24.85 6.08845 6.30017 24.4956 6.03425 47.5177L5.9996 50.5175L0 50.4482L0.0346494 47.4484C0.338426 21.1488 21.5493 0.101045 47.8505 0.000360638C74.2353 -0.100643 95.9321 21.0268 96.0341 47.4717C96.1146 68.3383 82.6574 86.15 64.0246 92.665C58.9511 94.4389 53.4948 95.3756 47.8274 95.3104L39.7688 95.2175L66.0344 73.0407V85.3681C80.2346 78.674 90.0985 64.1853 90.0341 47.4948Z"/></svg>
+                    </button>
+                </div>
+
+                <h3 class="subTitle color-headText">POUSE</h3>
+                <button id="btnPouse" class="btn is-rect bg-button color-text">SPACE</button>
+            </div>
+
+            <div class="container_column is-w bg-field">
+                <h2 class="container_column_title is-hidden">FIELD</h2>
+                <canvas id="field" width="800" height="1600" class="container_column_canvas"></canvas>
+
+                <div id="menu" class="container_column_menu bg-menu" style="">
+                    <div class="menu">
+                        <h3 class="menu_title color-headText">MENU</h3>
+                        <button id="btnContinue" class="menu_btn color-text" disabled>CONTINUE</button>
+                        <button id="btnNewGame" class="menu_btn color-text">NEW GAME</button>
+
+                        <div class="menu_setting">
+                            <label class="menu_setting_label color-headText" for="themeColor">Theme color :</label>
+                            <select id="themeColor" class="menu_setting_select color-text">
+                                <option value="basic">BASIC</option>
+                                <option value="light">LIGHT</option>
+                                <option value="dark">DARK</option>
+                                <option value="garden">GARDEN</option>
+                                <option value="forest">FOREST</option>
+                                <option value="desert">DESERT</option>
+                                <option value="aurora">AURORA</option>
+                                <option value="dream">DREAM</option>
+                                <option value="ocean">OCEAN</option>
+                            </select>
+                        </div>
+                        <div class="menu_setting">
+                            <label class="menu_setting_label color-headText" for="minoColor">Minos color :</label>
+                            <select id="minoColor" class="menu_setting_select color-text">
+                                <option value="basic">BASIC</option>
+                                <option value="vivit">VIVIT</option>
+                                <option value="pastel">PASTEL</option>
+                                <option value="mono">MONO</option>
+                                <option value="spring">SPRING</option>
+                                <option value="summer">SUMMER</option>
+                                <option value="autumn">AUTUMN</option>
+                                <option value="winter">WINTER</option>
+                            </select>
+                            <ul class="menu_setting_colors">
+                                <li id="minoT" class="el_item mino-T">T</li>
+                                <li id="minoZ" class="el_item mino-Z">Z</li>
+                                <li id="minoL" class="el_item mino-L">L</li>
+                                <li id="minoO" class="el_item mino-O">O</li>
+                                <li id="minoS" class="el_item mino-S">S</li>
+                                <li id="minoI" class="el_item mino-I">I</li>
+                                <li id="minoJ" class="el_item mino-J">J</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div class="container_right">
-
+            <div class="container_column is-s bg-column">
+                <h2 class="container_column_title color-headText">NEXT</h2>
+                <canvas id="next" width="380" height="380" class="container_column_canvas"></canvas>
             </div>
+
+            <div class="container_column is-m">
+                <div class="container_column_pent bg-pent">
+                    <h2 class="el_title">FUTURE</h2>
+                    <canvas id="future1" width="180" height="180" class="el_canvas"></canvas>
+                    <canvas id="future2" width="180" height="180" class="el_canvas"></canvas>
+                    <canvas id="future3" width="180" height="180" class="el_canvas"></canvas>
+                    <canvas id="future4" width="180" height="180" class="el_canvas"></canvas>
+                    <canvas id="future5" width="180" height="180" class="el_canvas"></canvas>
+                </div>
+                <div class="container_column_rect bg-column">
+                    <h2 class="el_title color-headText">SPEED</h2>
+                    <div id="speed" class="el_meter bg-meter"></div>
+                </div>
+            </div>
+
+            <div class="container_column is-f bg-column">
+                <h2 class="container_column_title is-hidden">CONTROLLER RIGHT</h2>
+
+                <div class="container_column_arrow">
+                    <div class="el_top">
+                        <h3 class="subTitle color-headText">DROP</h3>
+                        <button id="btnDrop" class="btn is-square is-drop bg-button color-text"></button>
+                    </div>
+
+                    <div class="el_middle">
+                        <h3 class="subTitle color-headText">LEFT</h3>
+                        <button id="btnLeft" class="btn is-square is-left bg-button color-text"></button>
+                    </div>
+
+                    <div class="el_middle">
+                        <h3 class="subTitle color-headText">RIGHT</h3>
+                        <button id="btnRight" class="btn is-square is-right bg-button color-text"></button>
+                    </div>
+                    
+                    <div class="el_bottom">
+                        <h3 class="subTitle color-headText">DOWN</h3>
+                        <button id="btnDown" class="btn is-square is-down bg-button color-text"></button>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <script src="/src/main.js"></script>
+        <script src="src/main.js"></script>
     </body>
 </html>

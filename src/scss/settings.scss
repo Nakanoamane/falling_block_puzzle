@@ -1,0 +1,224 @@
+// mino colors
+$mino-color-basic: (
+    T: #777,
+    Z: #777,
+    L: #777,
+    O: #777,
+    S: #777,
+    I: #777,
+    J: #777
+);
+
+$mino-color-vivit: (
+    T: #F0F,
+    Z: #F00,
+    L: #F80,
+    O: #FF0,
+    S: #0F0,
+    I: #0FF,
+    J: #00F
+);
+
+$mino-color-pastel: (
+    T: #FAF,
+    Z: #FAA,
+    L: #FCA,
+    O: #FFA,
+    S: #AFA,
+    I: #AFF,
+    J: #AAF
+);
+
+$mino-color-deep: (
+    T: #6C254C,
+    Z: #611D1D,
+    L: #5B2519,
+    O: #594614,
+    S: #0E4527,
+    I: #074242,
+    J: #291959
+);
+
+$mino-color-mono: (
+    T: #222,
+    Z: #444,
+    L: #666,
+    O: #888,
+    S: #aaa,
+    I: #ccc,
+    J: #eee
+);
+
+$mino-color-spring: (
+    T: #F282B8,
+    Z: #E85A73,
+    L: #FF8F77,
+    O: #EED23E,
+    S: #ACDC47,
+    I: #42971A,
+    J: #0E7A46
+);
+
+$mino-color-summer: (
+    T: #F2FF9F,
+    Z: #E3FF34,
+    L: #C4FF47,
+    O: #35FFAA,
+    S: #1EFFF1,
+    I: #00CEFB,
+    J: #0386FF
+);
+
+$mino-color-autumn: (
+    T: #E52B2B,
+    Z: #981D1D,
+    L: #D6613C,
+    O: #B44507,
+    S: #A15E20,
+    I: #8E6D17,
+    J: #FFD646
+);
+
+$mino-color-winter: (
+    T: #FFB2A8,
+    Z: #FFFCE4,
+    L: #CEFFFF,
+    O: #BAF3FF,
+    S: #93EBFF,
+    I: #A5D9FF,
+    J: #97BAFF
+);
+
+$mino-color-list: (
+    basic: $mino-color-basic,
+    vivit: $mino-color-vivit,
+    pastel: $mino-color-pastel,
+    mono: $mino-color-mono,
+    spring: $mino-color-spring,
+    summer: $mino-color-summer,
+    autumn: $mino-color-autumn,
+    winter: $mino-color-winter
+);
+
+
+// theme colors
+$theme-color-basic: (
+    back: #1e1e1e,
+    field: #222,
+    grid: #000,
+    column: #333,
+    menu: rgba(0, 0, 0, 0.8),
+    headText: #CCC,
+    text: #FFF,
+    button: #999,
+    meter: linear-gradient(to bottom, #BBB, #999, #777, #555, #333)
+);
+
+$theme-color-light: (
+    back: #FFF,
+    field: #EEE,
+    grid: #FFF,
+    column: #DDD,
+    menu: rgba(238, 238, 238, 0.8),
+    headText: #777,
+    text: #555,
+    button: #EEE,
+    meter: linear-gradient(to bottom, #444, #666, #888, #AAA, #CCC)
+);
+
+$theme-color-dark: (
+    back: #000,
+    field: #111,
+    grid: #000,
+    column: #222,
+    menu: rgba(34, 34, 34, 0.8),
+    headText: #AAA,
+    text: #DDD,
+    button: #111,
+    meter: linear-gradient(to bottom, #CCC, #AAA, #888, #666, #444)
+);
+
+$theme-color-garden: (
+    back: #BCD998,
+    field: #FFFFE5,
+    grid: #E5F4D3,
+    column: #FFFFD2,
+    menu: rgba(255, 255, 210, 0.8),
+    headText: #F99090,
+    text: #F65787,
+    button: #FFBCBC,
+    meter: linear-gradient(to bottom, #F4495E, #FF6B7D, #FF9D9D, #FFC7C7, #FFE2E2)
+);
+
+$theme-color-forest: (
+    back: #05302B,
+    field: #052925,
+    grid: #0B3E38,
+    column: #032521,
+    menu: rgba(37, 84, 78, 0.8),
+    headText: #829F6A,
+    text: #E3FFA9,
+    button: #447538,
+    meter: linear-gradient(to bottom, #C7F39B, #8FC676, #40953F, #1D6531, #083C26)
+);
+
+$theme-color-desert: (
+    back: #CFAB74,
+    field: #C79C5C,
+    grid: #DDB984,
+    column: #E4BE84,
+    menu: rgba(240, 204, 148, 0.8),
+    headText: #BC814A,
+    text: #894E17,
+    button: #DCA15D,
+    meter: linear-gradient(to bottom, #BC4F00, #BF6F11, #CE9032, #CA9E49, #D0AC65)
+);
+
+$theme-color-aurora: (
+    back: linear-gradient(180deg, #34229C 0%, #110F1E 100%),
+    field: #2B3484,
+    grid: #1F0F5F,
+    column: #341D76,
+    menu: rgba(29, 14, 71, 0.8),
+    headText: #52927B,
+    text: #90FFD8,
+    button: #27145E,
+    meter: linear-gradient(to bottom, #80C0AA, #BAC091, #B85AB4, #AB5CDB, #5135A0)
+);
+
+$theme-color-dream: (
+    back: radial-gradient(49.96% 50% at 50.04% 50%, #FFE6FE 0%, #FFD2FD 83.33%, #F3C4FB 100%),
+    field: #B8F2FF,
+    grid: #FFF6FC,
+    column: #FFFDE9,
+    menu: rgba(255, 255, 255, 0.8),
+    headText: #FFC5D6,
+    text: #FF90D3,
+    button: #FFE2F7,
+    meter: linear-gradient(to bottom, #A8EAFF, #A4FFEF, #B4FFBB, #D8FF86, #FFF7AC)
+);
+
+$theme-color-ocean: (
+    back: #00B8C3,
+    field: #24CBD4,
+    grid: #58ECF4,
+    column: #019BA3,
+    menu: rgba(0, 118, 124, 0.8),
+    headText: #CFB8B0,
+    text: #FFBAA1,
+    button: #00799e,
+    meter: linear-gradient(to bottom, #252980, #1C4DAE, #0B77B4, #17B5E7, #05D2DD)
+);
+
+$theme-color-list: (
+    basic: $theme-color-basic,
+    light: $theme-color-light,
+    dark: $theme-color-dark,
+    garden: $theme-color-garden,
+    forest: $theme-color-forest,
+    desert: $theme-color-desert,
+    aurora: $theme-color-aurora,
+    dream: $theme-color-dream,
+    ocean: $theme-color-ocean,
+);
+
