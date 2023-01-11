@@ -1,22 +1,6 @@
-// Constants
-const fieldX = 10;
-const fieldY = 20;
-const overY = 2;
-
-const minoSettings = {
-    T: [[1, 1], [0, 1], [2, 1], [1, 0]],
-    Z: [[1, 1], [1, 0], [0, 0], [2, 1]],
-    L: [[2, 1], [1, 1], [2, 0], [0, 1]],
-    O: [[1, 0], [2, 0], [1, 1], [2, 1]],
-    S: [[1, 1], [1, 0], [0, 1], [2, 0]],
-    I: [[0, 1], [1, 1], [2, 1], [3, 1]],
-    J: [[0, 1], [1, 1], [2, 1], [0, 0]]
-}
-const minos = Object.keys(minoSettings);
-
-const speedMax = 10;
-const speedMin = 1;
-const dropSpeed = 1000;
+import * as Settings from './scripts/settings.js';
+import Block from './scripts/block.js';
+import { Mino, CurrentMino } from './scripts/mino.js';
 
 // Variables
 let playStatus = false;
@@ -49,7 +33,7 @@ let $btnNewGame = document.getElementById('btnNewGame');
 let $themeColor = document.getElementById('themeColor');
 let $minoColor = document.getElementById('minoColor');
 let $minos = {};
-minos.forEach(m => {
+Settings.minos.forEach(m => {
     $minos[m] = document.getElementById(`mino${m}`);
 });
 
@@ -71,174 +55,10 @@ for (let i = 1; i <= 5; i++){
     ctxFutures.push($el.getContext('2d'));
 }
 
-// Class
-class Block {
-    ctx;
-    size;
-    color;
-    x;
-    y;
-
-    constructor(attr = {}) {
-        this.setAttr(attr);
-    }
-
-    setAttr(attr = {}) {
-        this.ctx = attr['ctx'] ? attr['ctx'] : this.ctx;
-        this.size = attr['size'] ? attr['size'] : this.size;
-        this.color = attr['color'] ? attr['color'] : this.color;
-        this.x = attr['x'] || attr['x'] === 0 ? attr['x'] : this.x;
-        this.y = attr['y'] || attr['y'] === 0 ? attr['y'] : this.y;
-    }
-
-    write() {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.size, this.size);
-    }
-
-    clear() {
-        this.ctx.clearRect(this.x, this.y, this.size, this.size);
-    }
-
-    rewrite(attr = {}) {
-        this.clear();
-        this.setAttr(attr);
-        this.write();
-    }
-
-    fieldXY() {
-        let x = this.x / ($field.width / fieldX);
-        let y = this.y / ($field.height / fieldY);
-        return [x, y]
-    }
-}
-
-class Mino {
-    type;
-    ctx;
-    size;
-    color;
-    x;
-    y;
-    blocks = [];
-
-    constructor(attr = {}) {
-        this.setAttr(attr);
-    }
-
-    setAttr(attr = {}) {
-        this.type = attr['type'] ? attr['type'] : this.type;
-        this.ctx = attr['ctx'] ? attr['ctx'] : this.ctx;
-        this.size = attr['size'] ? attr['size'] : this.size;
-        this.color = attr['type'] ? minoColors[attr['type']] : this.color;
-        this.x = attr['x'] || attr['x'] === 0 ? attr['x'] : this.x;
-        this.y = attr['y'] || attr['y'] === 0 ? attr['y'] : this.y;
-    }
-
-    write() {
-        let settings = minoSettings[this.type];
-        
-        settings.forEach(array => {
-            let attr = {
-                ctx: this.ctx,
-                size: this.size,
-                color: this.color,
-                x: this.x  + (array[0] * this.size),
-                y: this.y + (array[1] * this.size)
-            }
-            let block = new Block(attr);
-            block.write();
-            this.blocks.push(block);
-        });
-    }
-
-    clear() {
-        this.blocks.forEach(block => { block.clear(); });
-        this.blocks = [];
-    }
-
-    rewrite(attr) {
-        this.clear();
-        this.setAttr(attr);
-        this.write();
-    }
-
-    move(to) {
-        let table = {
-            set: {},
-            left: {x: this.x - this.size},
-            right: {x: this.x + this.size},
-            down: {y: this.y + this.size},
-        }
-
-        if (this.canMove(table[to])) {
-            this.rewrite(table[to]);
-        } else if (this.isLanded()) {
-            landed();
-        }
-    }
-
-    canMove(expection) {
-        return true
-    }
-
-    rotate() {
-
-    }
-
-    canRotate() {
-
-    }
-
-    landed() {
-        this.clear();
-    }
-
-    isLanded() {
-
-    }
-}
-
-// Contoroll Mino
-const createFieldMino = (type) => {
-    let size = $field.width / fieldX;
-    let x = size * 3;
-    let y = size * -2;
-
-    let attr = {
-        type: type,
-        ctx: ctxField,
-        size: size,
-        x: x,
-        y: y
-    };
-
-    return new Mino(attr);
-}
-
-const createMinoInSquare = (canvas, ctx, type) => {
-    let size = canvas.width / 5;
-    let x = size * 1;
-    if(['O', 'I'].includes(type)) {
-        x = size * 0.5;
-    }
-    let y = size * 1.5;
-
-    let attr = {
-        type: type,
-        ctx: ctx,
-        size: size,
-        x: x,
-        y: y
-    };
-
-    return new Mino(attr);
-}
-
 const defaultMinoTypes = () => {
     let array = [];
-    for(let i = 0; i < minos.length; i++) {
-        let remains = minos.filter(m => !array.includes(m));
+    for(let i = 0; i < Settings.minos.length; i++) {
+        let remains = Settings.minos.filter(m => !array.includes(m));
         let rand = (Math.random() * remains.length) | 0;
         array.push(remains[rand]);
     }
@@ -248,30 +68,34 @@ const defaultMinoTypes = () => {
 const setFirstMinos = () => {
     let types = defaultMinoTypes();
 
-    current = createFieldMino(types.shift());
+    let cType = types.shift();
+    current = CurrentMino.createMino($field, ctxField, cType, minoColors[cType]);
     current.write();
     
-    next = createMinoInSquare($next, ctxNext, types.shift());
+    let nType = types.shift();
+    next = Mino.createMino($next, ctxNext, nType, minoColors[nType]);
     next.write();
 
     types.forEach((t, i) => {
-        let m = createMinoInSquare($futures[i], ctxFutures[i], t);
+        let m = Mino.createMino($futures[i], ctxFutures[i], t, minoColors[t]);
         m.write();
         futures.push(m);
     });
 }
 
 const nextMino = () => {
-    current = createFieldMino(next.type);
+    current = CurrentMino.createMino($field, ctxField, next.type, minoColors[next.type]);
     current.write();
 
     next.clear();
     futures.forEach(f => { f.clear();})
-    next = createMinoInSquare($next, ctxNext, futures.shift().type);
+    let nType = futures.shift().type
+    next = Mino.createMino($next, ctxNext, nType, minoColors[nType]);
     next.write();
 
-    let rand = (Math.random() * minos.length) | 0;
-    let newMino = createMinoInSquare($futures[-1], ctxFutures[-1], minos[rand]);
+    let rand = (Math.random() * Settings.minos.length) | 0;
+    let fType = Settings.minos[rand];
+    let newMino = Mino.createMino($futures[-1], ctxFutures[-1], fType, minoColors[fType]);
     futures.push(newMino);
     futures.forEach((f, i)=> { 
         f.rewrite({ctx: ctxFutures[i+1]});
@@ -294,9 +118,11 @@ const setSpeed = () => {
 }
 
 const setDropTimer = (multi = 1) => {
-    let min = dropSpeed / speedMax;
-    let i = (dropSpeed / speed) * multi;
+    let min = Settings.dropSpeed / Settings.speedMax;
+    let i = (Settings.dropSpeed / speed) * multi;
     i = i > min ? i : min;
+
+    console.log(current);
 
     dropTimer = setInterval( () => {
         current.move('down');
@@ -320,7 +146,7 @@ const setMinoColors = (value) => {
     changeColors('mino', value);
 
     minoColors = [];
-    minos.forEach(m => {
+    Settings.minos.forEach(m => {
         let style = window.getComputedStyle($minos[m]);
         minoColors[m] = style.getPropertyValue('color');
     });
@@ -371,9 +197,8 @@ const initTime = () => {
 // Controll Field
 const initField = () => {
     ctxField.clearRect(0, 0, ctxField.width, ctxField.Height);
-    for (let y = 0; y < fieldY + overY; y++) {
-        let array = [];
-        for (let x=0;x<fieldX;x++) { array.push(null) }
+    for (let y = 0; y < Settings.fieldY + Settings.overY; y++) {
+        for (let x=0; x < Settings.fieldX;x++) { field.push(null) }
     }
 }
 
@@ -391,7 +216,7 @@ const initGame = () => {
 
     initTime();
 
-    speed = speedMin;
+    speed = Settings.speedMin;
     displaySpeed();
     
     if (current) { current.clear(); }
@@ -449,19 +274,19 @@ const turnRightMino = () => {
 }
 
 const dropMino = () => {
-
+    current.drop();
 }
 
 const moveLeftMino = () => {
-
+    current.move('left');
 }
 
 const moveRightMino = () => {
-
+    current.move('right');
 }
 
 const moveDownMino = () => {
-
+    current.move('down');
 }
 
 const clearRows = () => {
@@ -487,8 +312,8 @@ $minoColor.onchange = (e) => {
 
 const keyElTable = {
     hold:  { code: 'KeyS', el: 'btnHold',  func: holdMino },
-    turnL: { code: 'KeyZ', el: 'btnTurnL', func: dropMino },
-    turnR: { code: 'KeyX', el: 'btnTurnR', func: turnLeftMino },
+    turnL: { code: 'KeyZ', el: 'btnTurnL', func: turnLeftMino },
+    turnR: { code: 'KeyX', el: 'btnTurnR', func: turnRightMino },
     pouse: { code: 'Space', el: 'btnPouse', func: pouseGame },
     drop:  { code: 'ArrowUp', el: 'btnDrop',  func: dropMino },
     left:  { code: 'ArrowLeft', el: 'btnLeft',  func: moveLeftMino },

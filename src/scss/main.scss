@@ -1,8 +1,8 @@
-@import 'reset';
-@import 'settings';
+@use 'reset';
+@use '_settings' as settings;
 
 // themecolor
-@each $key, $colors in $theme-color-list {
+@each $key, $colors in settings.$theme-color-list {
     .theme-color-#{$key} {
         background: map-get($colors, back);
 
@@ -113,7 +113,7 @@
 
 
 // minos color
-@each $key, $colors in $mino-color-list {
+@each $key, $colors in settings.$mino-color-list {
     .mino-color-#{$key} {
         @each $k, $color in $colors { 
             .mino-#{$k} {
@@ -163,7 +163,7 @@ button, select {
     gap: 1.25%;
 
     &_column {
-        width: 23.75%;
+        width: 23.25%;
         height: auto;
         position: relative;
         margin: auto 0;
