@@ -187,7 +187,6 @@ const CurrentMino = class CurrentMino extends Mino {
     createShadow() {
         let alpha = 0.15;
         let str = ', ' + alpha + ')';
-
         let shadowAttr = {...this.attr, ...{
             color: this.color.replace('rgb', 'rgba').replace(')', str),
             y: this.lowestY()
@@ -279,11 +278,12 @@ const CurrentMino = class CurrentMino extends Mino {
     }
 
     lowestY() {
+        let start = this.startForLowest();
         let indexY = 0;
         this.blocks.forEach(block => {
             let [x, _]  = block.fieldXY(this.game.canvases.field);
             let reversed = [...this.game.field.table].reverse();
-            let reversedTop = reversed.findIndex(row => row[x]);
+            let reversedTop = reversed.findIndex((row, i) => i >= start && row[x]);
             let fieldTop = reversedTop >= 0 ? (reversed.length - 1 - reversedTop) : -1
             let difffMinoTop = (block.y - this.y) / this.size
             let iy = fieldTop + 1 + difffMinoTop;
@@ -291,6 +291,18 @@ const CurrentMino = class CurrentMino extends Mino {
         });
 
         return (Config.fieldY - indexY - 1) * this.size
+    }
+
+    startForLowest(){
+        let indexMax = this.game.field.table.length - 1
+        let bottomY = indexMax;
+        this.blocks.forEach(b => {
+            let [_, y] = b.fieldXY(this.game.canvases.field);
+            if(bottomY > y){ bottomY = y }
+        })
+        let start = indexMax - bottomY
+
+        return start
     }
 
     turn(dir) {

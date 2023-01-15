@@ -97,7 +97,7 @@ const Field = class Field {
     updateScoreAndSpeed(count) {
         this.game.score.add(this.game.speed.multiplier, count);
         this.clearedRows += count;
-        if (this.clearedRows%5 === 0) {
+        if (this.clearedRows%10 === 0) {
             this.game.speed.update();
         }
     }
