@@ -1,8 +1,9 @@
-import * as Settings from './settings.js';
+import Config from './config.js';
 
 const Block = class Block {
     ctx;
     size;
+    type;
     color;
     x;
     y;
@@ -12,21 +13,30 @@ const Block = class Block {
     }
 
     set attr(attr = {}) {
-        this.ctx = attr['ctx'] ? attr['ctx'] : this.ctx;
-        this.size = attr['size'] ? attr['size'] : this.size;
-        this.color = attr['color'] ? attr['color'] : this.color;
-        this.x = attr['x'] || attr['x'] === 0 ? attr['x'] : this.x;
-        this.y = attr['y'] || attr['y'] === 0 ? attr['y'] : this.y;
+        let merged = {...this.attr, ...attr}
+        this.ctx = merged.ctx;
+        this.size = merged.size;
+        this.type = merged.type;
+        this.color = merged.color;
+        this.x = merged.x;
+        this.y = merged.y;
     }
 
     get attr() {
         return {
             ctx: this.ctx,
             size: this.size,
+            type: this.type,
             color: this.color,
             x: this.x,
             y: this.y
         }
+    }
+
+    fieldXY($field) {
+        let x = this.x / ($field.width / Config.fieldX);
+        let y = Config.fieldY - 1 - (this.y / ($field.height / Config.fieldY));
+        return [x, y]
     }
 
     write() {
@@ -44,15 +54,6 @@ const Block = class Block {
         this.write();
     }
 
-    fieldXY() {
-        let x = this.x / ($field.width / Settings.fieldX);
-        let y = this.y / ($field.height / Settings.fieldY);
-        return [x, y]
-    }
-
-    isInField() {
-
-    }
 }
 
 export default Block

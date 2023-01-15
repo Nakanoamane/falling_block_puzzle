@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>TETRIS</title>
+        <link rel="icon" href="src/favicon.ico">
         <link rel="stylesheet" href="src/main.css">
     </head>
 
@@ -146,6 +147,9 @@
 
         </div>
 
-        <script src="src/main.js" type="module"></script>
+        <script type="module">
+            import Game from './src/scripts/game.js';
+            new Game();
+        </script>
     </body>
 </html>
