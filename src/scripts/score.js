@@ -13,7 +13,7 @@ const Score = class Score {
     }
 
     add(speed, rows) {
-        this.score = 100 * rows * (speed + 1);
+        this.score = score + 100 * rows * (speed + 1);
         this.write();
     }
 }
