@@ -1,7 +1,7 @@
 const speedMax = 10;
 const speedMin = 0;
 const dropSpeed = 1000;
-const adjast = 1.1;
+const adjast = 1.3;
 
 const Speed = class Speed {
     $speed
@@ -15,7 +15,7 @@ const Speed = class Speed {
 
     get ms() {
         if(this.multiplier){
-            return dropSpeed / (this.multiplier * ( adjast ** this.multiplier ))
+            return dropSpeed / (adjast ** this.multiplier )
         } else {
             return dropSpeed
         }

@@ -374,6 +374,7 @@ const CurrentMino = class CurrentMino extends Mino {
         if(this.game.field.isOver()) {
             this.game.over();
         }else {
+            this.game.isHold = false;
             this.game.setNextMinos();
         }
     }

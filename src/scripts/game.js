@@ -16,6 +16,7 @@ const Game = class Game {
     ctxs = {};
 
     playStatus = false;
+    ishold = false;
     score;
     timer;
     speed; 
@@ -67,6 +68,7 @@ const Game = class Game {
         
     }
     setMinoColors(value) {
+
         this.changeColors('mino', value);
 
         Config.minos.forEach(m => {
@@ -183,10 +185,17 @@ const Game = class Game {
     };
 
     holdMino(game) {
+        if(game.isHold){ return; } else { game.isHold = true }
         let attr = {...game.current.attr};
 
         if(game.hold){
-            game.current.rewrite({type: game.hold.type, color: game.hold.color});
+            game.current.clear();
+            game.current.clearAutoDrop();
+
+            game.current = CurrentMino.build(game.hold.type, game);
+            game.current.write();
+            game.current.setAutoDrop(game.speed.ms);
+
             game.hold.rewrite({type: attr.type, color: attr.color});
         } else {
             game.current.clearAutoDrop();
