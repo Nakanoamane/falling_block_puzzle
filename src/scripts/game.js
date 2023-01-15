@@ -4,7 +4,6 @@ import Timer from './timer.js';
 import Speed from './speed.js';
 import Score from './score.js';
 import { Mino, CurrentMino, FutureMino } from './mino.js';
-import Block from './block.js';
 
 const Game = class Game {
     $menu;
@@ -133,7 +132,6 @@ const Game = class Game {
         })
     }
 
-    // Change config
     changeColors = (type, value) => {
         let cl = document.body.classList;
         let oldClassName = [].slice.apply(cl).find(c => c.startsWith(type));
@@ -145,7 +143,6 @@ const Game = class Game {
         }
     }
 
-    // Controll Game
     play() {
         this.playStatus = true;
         this.$menu.style.display = 'none';
@@ -185,8 +182,6 @@ const Game = class Game {
         this.pouse(this);
     };
 
-
-    // Event functions
     holdMino(game) {
         let attr = {...game.current.attr};
 

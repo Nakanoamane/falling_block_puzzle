@@ -1,4 +1,3 @@
-
 const Config = class Config {
 
     static fieldX = 10;

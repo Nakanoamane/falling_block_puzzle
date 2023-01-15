@@ -9,7 +9,7 @@ const Speed = class Speed {
 
     constructor() {
         this.$speed = document.getElementById('speed');
-        this.multiplier = speedMax;
+        this.multiplier = speedMin;
         this.write();
     }
 
