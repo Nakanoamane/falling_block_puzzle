@@ -249,6 +249,7 @@ button, select {
             margin: 0 auto;
             font-weight: 600;
             position: relative;
+            touch-action: manipulation;
 
             &.is-circle {
                 aspect-ratio: 1/1;

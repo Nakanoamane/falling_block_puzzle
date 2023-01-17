@@ -63,7 +63,7 @@ const Mino = class Mino {
     static getSizeAndPosition($canvas, type) {
         let size = $canvas.width / 5;
         let x = this.alignCenter(size, type);
-        let y = size * 1.5;
+        let y = size * 0.5;
 
         return [size, x, y]
     }
@@ -179,7 +179,7 @@ const CurrentMino = class CurrentMino extends Mino {
     static getSizeAndPosition($canvas) {
         let size = $canvas.width / Config.fieldX;
         let x = size * 3;
-        let y = size * -2;
+        let y = size * -3;
 
         return [size, x, y]
     }
@@ -221,10 +221,19 @@ const CurrentMino = class CurrentMino extends Mino {
         clearInterval(this.autoDrop);
     }
 
+    resetAutoDrop() {
+        this.clearAutoDrop()
+        this.setAutoDrop(this.game.speed.ms)
+    }
+
     move(to) {
-        if (this.isLanded() && to === 'down') {
-            this.land();
-            return;
+        if (this.isLanded()) {
+            if(to === 'down') {
+                this.land();
+                return;
+            } else {
+                this.resetAutoDrop();
+            }           
         } 
 
         let position = {
@@ -306,55 +315,59 @@ const CurrentMino = class CurrentMino extends Mino {
     }
 
     turn(dir) {
-        let pm = dir === 'right' ? 1 : -1;
-        let deg = this.deg + (90 * pm);
-        let exp = { deg: this.degToUnder360(deg) }
-
-        if(this.canRewrite(exp)){
-            this.rewrite(exp);
-            return;
+        if(this.isLanded()) {
+            this.resetAutoDrop();
         }
+        
+        let exp = this.tryTurns(dir);
 
-        let otherExp = this.turnByOtherShaft(exp.deg, pm);
-        if(otherExp){
-            this.rewrite(otherExp);
+        if(exp){
+            this.rewrite(exp);
         }
     }
 
-    turnByOtherShaft(deg, pm) {
+    tryTurns(dir) {
+        let pm = dir === 'right' ? 1 : -1;
+
+        for(let i = 1; i <= 3; i++) {
+            let deg = this.deg + (90 * pm * i);
+            let exp = { deg: this.degToUnder360(deg) }
+    
+            if(this.canRewrite(exp)){
+                return exp;
+            }
+    
+            let otherExp = this.turnByOtherShaft(exp.deg, dir);
+            if(otherExp){
+                return otherExp;
+            }
+        }
+    }
+
+    turnByOtherShaft(deg) {
         let exp = null
 
         this.blocks.forEach(block => {
-            [0, 1].forEach(i => {
-                let x = block.x - ( (block.x - this.x / this.size) * this.size * i );
-                let e = { deg: deg, x: x, y: block.y }
-                let canRewrite = this.canRewrite(e);
-    
-                if(canRewrite && (!exp || exp.y > e.y)){ exp = e } 
-    
-                if(!canRewrite){
-                    let degExp = this.turnByOherDeg(e, deg,pm);
-                    if (this.canRewrite(degExp) && (!exp || exp.y > degExp.y)){
-                        exp = degExp;
+            for(let i = 0; i < 3; i++) {
+                let x = block.x - ( ( block.x - this.x) * i )
+                let y = block.y - ( ( block.y - this.y) * i )
+                let e = { deg: deg, x: x, y: y }
+                
+                if(this.canRewrite(e)){ 
+                    if (!exp) {
+                        exp = e 
+                    } else {
+                        let expAbsX = Math.abs(this.x - exp.x);
+                        let eAbsX = Math.abs(this.x - e.x);
+                        let expAbsY = Math.abs(this.y - exp.y);
+                        let eAbsY = Math.abs(this.y - e.y);
+
+                        if( expAbsX >= eAbsX && expAbsY >= eAbsY && exp.y <= e.y ) { exp = e }
                     }
-                }
-            })
-            
-        })
-        return exp
-    }
-
-    turnByOherDeg(e, deg, pm){
-        let exp = {...e};
-
-        for(let i=0; i <= 2;i++){
-            let degExp = {...e, ...{
-                deg: this.degToUnder360(deg + (90 * pm))
-            }}
-            if (this.canRewrite(degExp) && (!exp || exp.y > degExp.y)){
-                exp = degExp;
+                } 
             }
-        }
+        })
+        
         return exp
     }
 
