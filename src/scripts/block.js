@@ -1,4 +1,4 @@
-import Config from './config.js';
+import Field from './field.js';
 
 const Block = class Block {
     ctx;
@@ -34,8 +34,8 @@ const Block = class Block {
     }
 
     fieldXY($field) {
-        let x = this.x / ($field.width / Config.fieldX);
-        let y = Config.fieldY - 1 - (this.y / ($field.height / Config.fieldY));
+        let x = this.x / ($field.width / Field.X);
+        let y = Field.Y - 1 - (this.y / ($field.height / Field.Y));
         return [x, y]
     }
 

@@ -1,4 +1,4 @@
-import Config from './config.js';
+import Field from './field.js';
 import Block from './block.js';
 import Speed from './speed.js';
 
@@ -11,8 +11,53 @@ const Mino = class Mino {
     x;
     y;
     deg = 0;
-
     blocks = [];
+
+    static TYPE_ANGLES = {
+        T: {									
+            0:   [	[1, 1],	[0, 2],	[1, 2],	[2, 2]	],
+            90:  [	[2, 2],	[1, 1],	[1, 2],	[1, 3]	],
+            180: [	[1, 3],	[2, 2],	[1, 2],	[0, 2]	],
+            270: [	[0, 2],	[1, 3],	[1, 2],	[1, 1]	]	
+        },  
+        Z: {									
+            0:   [	[0, 1],	[1, 1],	[1, 2],	[2, 2]	],
+            90:  [	[2, 1],	[2, 2],	[1, 2],	[1, 3]	],
+            180: [	[2, 3],	[1, 3],	[1, 2],	[0, 2]	],
+            270: [	[0, 3],	[0, 2],	[1, 2],	[1, 1]	]	
+        }, 
+        L: {									
+            0:   [	[2, 1],	[0, 2],	[1, 2],	[2, 2]	],
+            90:  [	[2, 3],	[1, 1],	[1, 2],	[1, 3]	],
+            180: [	[0, 3],	[2, 2],	[1, 2],	[0, 2]	],
+            270: [	[0, 1],	[1, 3],	[1, 2],	[1, 1]	]	
+        }, 
+        O: {									
+            0:   [	[1, 1],	[2, 1],	[1, 2],	[2, 2]	],
+            90:  [	[2, 1],	[2, 2],	[1, 1],	[1, 2]	],
+            180: [	[2, 2],	[1, 2],	[2, 1],	[1, 1]	],
+            270: [	[1, 2],	[1, 1],	[2, 2],	[2, 1]	]
+        }, 
+        S: {									
+            0:   [	[1, 1],	[2, 1],	[0, 2],	[1, 2]	],
+            90:  [	[2, 2],	[2, 3],	[1, 1],	[1, 2]	],
+            180: [	[1, 3],	[0, 3],	[2, 2],	[1, 2]	],
+            270: [	[0, 2],	[0, 1],	[1, 3],	[1, 2]	]	
+        }, 
+        I: {									
+            0:   [	[3, 2],	[2, 2],	[1, 2],	[0, 2]	],
+            90:  [	[2, 0],	[2, 1],	[2, 2],	[2, 3]	],
+            180: [	[0, 1],	[1, 1],	[2, 1],	[3, 1]	],
+            270: [	[1, 3],	[1, 2],	[1, 1],	[1, 0]	]	
+        }, 
+        J: {									
+            0:   [	[0, 1],	[0, 2],	[1, 2],	[2, 2]	],
+            90:  [	[2, 1],	[1, 1],	[1, 2],	[1, 3]	],
+            180: [	[2, 3],	[2, 2],	[1, 2],	[0, 2]	],
+            270: [	[0, 3],	[1, 3],	[1, 2],	[1, 1]	]	
+        }									
+    }
+    static TYPES = Object.keys(this.TYPE_ANGLES);
 
     constructor(attr = {}, game) {
         this.attr = attr;
@@ -78,8 +123,8 @@ const Mino = class Mino {
 
     static defaultMinoTypes () {
         let array = [];
-        for(let i = 0; i < Config.minos.length; i++) {
-            let remains = Config.minos.filter(m => !array.includes(m));
+        for(let i = 0; i < Mino.TYPES.length; i++) {
+            let remains = Mino.TYPES.filter(m => !array.includes(m));
             let rand = (Math.random() * remains.length) | 0;
             array.push(remains[rand]);
         }
@@ -91,10 +136,10 @@ const Mino = class Mino {
     }
 
     createBlocks() {
-        let settings = Config.minoSettings[this.type][this.deg];
+        let typeAngle = Mino.TYPE_ANGLES[this.type][this.deg];
         let blocks = []
         
-        settings.forEach(array => {
+        typeAngle.forEach(array => {
             let attr = {
                 ctx: this.ctx,
                 size: this.size,
@@ -177,7 +222,7 @@ const CurrentMino = class CurrentMino extends Mino {
     }
 
     static getSizeAndPosition($canvas) {
-        let size = $canvas.width / Config.fieldX;
+        let size = $canvas.width / Field.X;
         let x = size * 3;
         let y = size * -3;
 
@@ -223,7 +268,7 @@ const CurrentMino = class CurrentMino extends Mino {
 
     resetAutoDrop() {
         this.clearAutoDrop()
-        this.setAutoDrop(this.game.speed.ms)
+        this.setAutoDrop(this.game.speed.waitMs)
     }
 
     move(to) {
@@ -254,8 +299,8 @@ const CurrentMino = class CurrentMino extends Mino {
         let expMino = new CurrentMino(attr, this.game)
         let result = expMino.blocks.every(block => {
             let [x, y] = block.fieldXY(this.game.canvases.field);
-            return x >= 0 && x < Config.fieldX && 
-            y >= 0 && y < Config.fieldY + Config.overY && !this.game.field.table[y][x]
+            return x >= 0 && x < Field.X && 
+            y >= 0 && y < Field.Y + Field.OVER_Y && !this.game.field.table[y][x]
         });
 
         return result
@@ -266,7 +311,7 @@ const CurrentMino = class CurrentMino extends Mino {
             this.move('down');
             this.isDown = true;
             this.clearAutoDrop();
-            this.setAutoDrop(Speed.maxMs);
+            this.setAutoDrop(this.game.speed.maxMs);
         }
     }
 
@@ -299,7 +344,7 @@ const CurrentMino = class CurrentMino extends Mino {
             if (indexY < iy) { indexY = iy }
         });
 
-        return (Config.fieldY - indexY - 1) * this.size
+        return (Field.Y - indexY - 1) * this.size
     }
 
     startForLowest(){

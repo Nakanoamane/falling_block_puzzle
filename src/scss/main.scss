@@ -37,12 +37,12 @@
             &::before {
                 content: '';
                 position: absolute;
-                top: 4.5%;
+                top: 4%;
                 left: 50%;
                 height: auto;
-                width: 50%;
+                width: 52%;
                 aspect-ratio: 1/1;
-                transform: rotate(45deg) skew(-20deg, -20deg) translateX(-50%);
+                transform: rotate(45deg) skew(-20deg, -20deg) translateX(-52%);
                 background: map-get($colors, column);
                 z-index: -1;
             }
@@ -65,32 +65,17 @@
             }
 
             &.is-square {
-                &::before {
-                    content: '';
-                    display: block;
-                    width: 0;
-                    height: 0;
-                    border-style: solid;
-                }
                 &.is-drop::before {
-                    border-width: 0 12px 16px 12px;
                     border-color: transparent transparent map-get($colors, text) transparent;
-                    margin-bottom: 10px;
                 }
                 &.is-left::before {
-                    border-width: 12px 16px 12px 0;
                     border-color: transparent map-get($colors, text) transparent transparent;
-                    margin-right: 10px;
                 }
                 &.is-right::before {
-                    border-width: 12px 0 12px 16px;
                     border-color: transparent transparent transparent map-get($colors, text);
-                    margin-left: 10px;
                 }
                 &.is-down::before {
-                    border-width: 16px 12px 0 12px;
                     border-color: map-get($colors, text) transparent transparent transparent;
-                    margin-top: 10px;
                 }
             }
         }
@@ -139,8 +124,27 @@
     }
 }
 
+// mixin
+@mixin verticalCenter() {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    & > * {
+        width: 100%;
+    }
+}
+
 
 // tag
+
+* {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
 body {
     display: flex;
     width: 100%;
@@ -169,45 +173,149 @@ button, select {
     max-width: calc(100vh - 20px);
     aspect-ratio: 1/1;
     margin: 10px;
-    overflow: hidden;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1.25%;
+    display: grid;
+    grid-template-columns: 4fr 8fr 2fr 2fr;
+    grid-template-rows: 6fr 3fr 3fr 3fr 3fr 4fr; 
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "hold field next next"
+    "score field future speed"
+    "timer field future speed"
+    "contL field future speed"
+    "contL field contR contR"
+    "contL field contR contR";
 
     &_column {
-        width: 23.25%;
-        height: auto;
         position: relative;
-        margin: auto 0;
         overflow: hidden;
 
-        &.is-s {
-            aspect-ratio: 38/38;
+        &.is-hold { 
+            grid-area: hold;
+            margin: 0 10px 10px 0;
+        }   
+        &.is-score { 
+            grid-area: score; 
+            margin: 0 10px 10px 0;
+        }  
+        &.is-timer { 
+            grid-area: timer; 
+            margin: 0 10px 10px 0;
         }
-        &.is-l {
-            aspect-ratio: 38/25;
+        &.is-contL { 
+            grid-area: contL; 
+            margin-right: 10px;
+            @include verticalCenter();
         }
-        &.is-p {
-            aspect-ratio: 38/66;
-            padding-top: 10px;
+        &.is-field { grid-area: field; }
+        &.is-next { 
+            grid-area: next; 
+            margin: 0 0 10px 10px;;
         }
-        &.is-w {
-            width: 50%;
-            aspect-ratio: 1/2;
+        &.is-future { 
+            grid-area: future;
+            margin: 0 0 10px 10px;;
+            padding: 30% 20% 0;
+
+            .el_title {
+                width: 0;
+                height: 0;
+                font-size: 0;
+            }
+            .el_canvas {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1/1;
+                object-fit: contain;
+            }
         }
-        &.is-m {
-            aspect-ratio: 38/70;
-            display: flex;
-            gap: 8%;
+        &.is-speed { 
+            grid-area: speed; 
+            margin: 0 0 10px 10px;;
+            padding: 5px 10px 10px;
+
+            .el_title {
+                font-size: 80%;
+                text-align: center;
+            }
+            .el_meter {
+                width: 100%;
+                height: calc(100% - 20px);
+                object-fit: contain;
+            }
         }
-        &.is-f {
-            aspect-ratio: 38/48;
-            padding-top: 15px;
+        &.is-contR { 
+            grid-area: contR;
+            margin-left: 10px;
+            @include verticalCenter();
         }
         
+        .subTitle {
+            font-size: 80%;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            font-weight: 600;
+            position: relative;
+
+            &.is-circle {
+                aspect-ratio: 1/1;
+                width: calc(13/38*100%);
+                border-radius: 50%;
+                margin-bottom: 10%;
+            }
+            &.is-rect {
+                aspect-ratio: 3/1;
+                width: calc(30/38*100%);
+                margin-bottom: 10%;
+            }
+            &.is-square {
+                aspect-ratio: 1/1;
+                width: calc(11/38*100%);
+                &::before {
+                    content: '';
+                    display: block;
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                }
+                &.is-drop::before {
+                    border-width: 0 12px 16px 12px;
+                    margin-bottom: 10px;
+                }
+                &.is-left::before {
+                    border-width: 12px 16px 12px 0;
+                    margin-right: 10px;
+                }
+                &.is-right::before {
+                    border-width: 12px 0 12px 16px;
+                    margin-left: 10px;
+                }
+                &.is-down::before {
+                    border-width: 16px 12px 0 12px;
+                    margin-top: 10px;
+                }
+            }
+            &_icon {
+                position: absolute;
+                bottom: 50%;
+                right: 50%;
+                transform: translate(50%, 50%);
+                height: 0;
+                width: 80%;
+                height: 80%;
+                object-fit: contain;
+            }
+            &:active, &.is-active {
+                opacity: .6;
+            }
+        }
+
         &_title {
             position: absolute;
             top: 3px;
@@ -226,7 +334,7 @@ button, select {
             object-fit: contain;
         }
         &_score {
-            padding: 35% 10px 0;
+            padding: 25% 10px 0;
             text-align: right;
             text-overflow: ellipsis;
             overflow: hidden;
@@ -234,57 +342,14 @@ button, select {
         }
         &_time {
             text-align: center;
-            padding-top: 35%;
+            padding-top: 25%;
             font-size: 20px;
         }
 
-        .subTitle {
-            font-size: 80%;
-            text-align: center;
-        }
-        .btn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto;
-            font-weight: 600;
-            position: relative;
-            touch-action: manipulation;
-
-            &.is-circle {
-                aspect-ratio: 1/1;
-                width: calc(13/38*100%);
-                border-radius: 50%;
-                margin-bottom: 10%;
-            }
-            &.is-rect {
-                aspect-ratio: 3/1;
-                width: calc(30/38*100%);
-                margin-bottom: 10%;
-            }
-            &.is-square {
-                aspect-ratio: 1/1;
-                width: calc(11/38*100%);
-            }
-            &_icon {
-                position: absolute;
-                bottom: 50%;
-                right: 50%;
-                transform: translate(50%, 50%);
-                height: 0;
-                width: 80%;
-                height: 80%;
-                object-fit: contain;
-            }
-            &:hover, &.is-active {
-                opacity: .6;
-            }
-        }
         &_turn {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            
         }
         &_menu {
             position: absolute;
@@ -363,36 +428,6 @@ button, select {
                 }
             }
         }
-        &_pent {
-            width: 46%;
-            padding: 20% 8.5% 0;
-
-            .el_title {
-                width: 0;
-                height: 0;
-                font-size: 0;
-            }
-            .el_canvas {
-                width: 100%;
-                height: auto;
-                aspect-ratio: 1/1;
-                object-fit: contain;
-            }
-        }
-        &_rect {
-            width: 46%;
-            padding: 5px 10px 10px;
-
-            .el_title {
-                font-size: 80%;
-                text-align: center;
-            }
-            .el_meter {
-                width: 100%;
-                height: calc(100% - 20px);
-                object-fit: contain;
-            }
-        }
         &_arrow {
             display: flex;
             flex-wrap: wrap;
@@ -418,7 +453,149 @@ button, select {
             .el_middle, .el_bottom {
                 margin-top: -10%;
             }
+        }
+    }
+}
 
+// for responsive
+@media screen and (max-width: 600px) {
+    .container {
+        max-height: calc(100vh - 20px);
+        aspect-ratio: 5/8;
+        display: grid; 
+        grid-template-columns: 15fr 32fr 16fr 15fr; 
+        grid-template-rows: 15fr 41fr 40fr 29fr; 
+        gap: 0px 0px; 
+        grid-template-areas: 
+        "hold field field next"
+        "score field field future"
+        "timer field field speed"
+        "contL contL contR contR"; 
+
+        &_column {
+
+            &.is-score, &.is-timer {
+                writing-mode: vertical-rl;
+
+                .container_column_title {
+                    top: 3px;
+                    left: auto;
+                    right: 3px;
+                }
+                .container_column_score, .container_column_time{
+                    padding: 10% 15% 10% 0;
+                }
+            }
+            &.is-timer { 
+                margin-bottom:  0;
+            }
+            &.is-contL { 
+                margin-top: 10px;
+                flex-direction: row;
+                padding: 2% 0;
+
+                & > * {
+                    width: 50%;
+                }
+                & > .btn.is-circle {
+                    order: 4;
+                    width: calc(13/38*50%);
+                }
+                & > .btn.is-rect {
+                    order: 6;
+                    width: 40%;
+                }
+
+                .subTitle {
+                    margin: 2px 0 0;
+
+                    &.is-hold {
+                        order: 2;
+                    }
+                    &.is-turn {
+                        order: 1;
+                    }
+                    &.is-pouse {
+                        order: 5;
+                        width: 100%
+                    }
+                }
+                .btn {
+                    margin: 0 auto;
+                }
+
+            }
+            &_turn {
+                order: 3;
+                
+            }
+            &.is-future { 
+                padding: 30% 24% 0;
+            }
+            &.is-speed { 
+                margin-bottom: 0;
+                padding: 5px;
+    
+                .el_title {
+                    font-size: 10px;
+                }
+                .el_meter {
+                    height: calc(100% - 10px);
+                }
+            }
+            &.is-contR { 
+                margin-top: 10px;
+            }
+            &_arrow {
+                margin: 1% 0 3%;
+
+                .subTitle {
+                    margin-bottom: 0;
+                    transform: scale(.8);
+                }
+
+                .btn.is-square {
+                    width: 20%;
+                }
+                .el_middle {
+                    margin-top: -14%;
+
+                    .btn.is-square {
+                        width: 60%;
+                    }
+                }
+            }
+
+            .btn {
+                font-size: 0;
+
+                &.is-square {
+                    &.is-drop::before {
+                        border-width: 0 6px 8px 6px;
+                        margin-bottom: 5px;
+                    }
+                    &.is-left::before {
+                        border-width: 6px 8px 6px 0;
+                        margin-right: 5px;
+                    }
+                    &.is-right::before {
+                        border-width: 6px 0 6px 8px;
+                        margin-left: 5px;
+                    }
+                    &.is-down::before {
+                        border-width: 8px 6px 0 6px;
+                        margin-top: 5px;
+                    }
+                }
+            }
+
+            &_title {
+                font-size: 10px;
+            }
+            &_menu {
+
+            }
+            
         }
     }
 }

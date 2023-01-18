@@ -1,4 +1,4 @@
-import Config from './config.js';
+import Controller from './controller.js';
 import Field from './field.js';
 import Timer from './timer.js';
 import Speed from './speed.js';
@@ -6,17 +6,12 @@ import Score from './score.js';
 import { Mino, CurrentMino, FutureMino } from './mino.js';
 
 const Game = class Game {
-    $menu;
-    $btnContinue;
-    $btnNewGame;
-    $themeColor;
-    $minoColor;
-    $minos = {};
     canvases = {};
     ctxs = {};
 
     playStatus = false;
     ishold = false;
+    controller;
     score;
     timer;
     speed; 
@@ -29,22 +24,11 @@ const Game = class Game {
     
 
     constructor() {
+        this.controller = new Controller(this);
         this.getElements();
-        this.setMinoColors('basic');
-        this.setEvents();
-        this.setKeyEvents();
     }
 
     getElements(){
-        this.$menu = document.getElementById('menu');
-        this.$btnContinue = document.getElementById('btnContinue');
-        this.$btnNewGame = document.getElementById('btnNewGame');
-        this.$themeColor = document.getElementById('themeColor');
-        this.$minoColor = document.getElementById('minoColor');
-        Config.minos.forEach(m => {
-            this.$minos[m] = document.getElementById(`mino${m}`);
-        });
-
         let $futures = [];
         let ctxFutures = [];
         for (let i = 1; i <= 5; i++){
@@ -67,23 +51,7 @@ const Game = class Game {
         }
         
     }
-    setMinoColors(value) {
-
-        this.changeColors('mino', value);
-
-        Config.minos.forEach(m => {
-            let style = window.getComputedStyle(this.$minos[m]);
-            this.minoColors[m] = style.getPropertyValue('color');
-        });
-
-        if(this.field) { this.field.rewriteColor() }
-        if(this.current){ this.current.rewriteColor() }
-        if(this.next){ this.next.rewriteColor() }
-        if(this.hold){ this.hold.rewriteColor() }
-        this.futures.forEach(f => { f.rewriteColor() })
-    }
-
-
+    
     setMinos() {
         let types = Mino.defaultMinoTypes();
 
@@ -125,8 +93,8 @@ const Game = class Game {
         let n = this.futures.shift();
         this.next.rewrite({ type: n.type, color: n.color });
 
-        let rand = (Math.random() * Config.minos.length) | 0;
-        let fType = Config.minos[rand];
+        let rand = (Math.random() * Mino.TYPES.length) | 0;
+        let fType = Mino.TYPES[rand];
         let newMino = FutureMino.build(this.futures.length, fType, this);
         this.futures.push(newMino);
         this.futures.forEach((f, i)=> { 
@@ -134,20 +102,17 @@ const Game = class Game {
         })
     }
 
-    changeColors = (type, value) => {
-        let cl = document.body.classList;
-        let oldClassName = [].slice.apply(cl).find(c => c.startsWith(type));
-        let newClassName = `${type}-color-${value}`;
-
-        if(oldClassName != newClassName){
-            cl.add(newClassName);
-            cl.remove(oldClassName);
-        }
+    rewriteColors() {
+        if(this.field) { this.field.rewriteColor() }
+        if(this.current){ this.current.rewriteColor() }
+        if(this.next){ this.next.rewriteColor() }
+        if(this.hold){ this.hold.rewriteColor() }
+        this.futures.forEach(f => { f.rewriteColor() })
     }
 
     play() {
         this.playStatus = true;
-        this.$menu.style.display = 'none';
+        this.controller.$menu.style.display = 'none';
         this.timer.start();
         this.current.setAutoDrop(this.speed.ms);
     }
@@ -169,20 +134,20 @@ const Game = class Game {
         this.init();
         this.play();
         
-        this.$btnContinue.disabled = false;
-    }
-
-    pouse(game) {
-        game.playStatus = false;
-        game.$menu.style.display = 'flex';
-        game.timer.clear();
-        game.current.clearAutoDrop();
+        this.controller.$btnContinue.disabled = false;
     }
 
     over() {
-        this.$btnContinue.disabled = true;
+        this.controller.$btnContinue.disabled = true;
         this.pouse(this);
     };
+
+    pouse(game) {
+        game.playStatus = false;
+        game.controller.$menu.style.display = 'flex';
+        game.timer.clear();
+        game.current.clearAutoDrop();
+    }
 
     holdMino(game) {
         if(game.isHold){ return; } else { game.isHold = true }
@@ -232,76 +197,6 @@ const Game = class Game {
 
     stopDownMino(game) {
         game.current.stopDown(game.speed.ms);
-    }
-
-    setEvents() {
-        this.$btnContinue.onclick = () => {
-            if(!this.playStatus){
-                this.play();
-            }
-        }
-
-        this.$btnNewGame.onclick = () => {
-            if(!this.playStatus){
-                this.new();
-            }
-        }
-
-        this.$themeColor.onchange = (e) => {
-            this.changeColors('theme', e.target.value);
-        }
-
-        this.$minoColor.onchange = (e) => {
-            this.setMinoColors(e.target.value);
-        }
-    }
-
-    setKeyEvents() {
-        let game = this;
-
-        let onKeyDown = {
-            hold:  game.holdMino,
-            turnL: game.turnLeftMino,
-            turnR: game.turnRightMino,
-            pouse: game.pouse,
-            drop:  game.dropMino,
-            left:  game.moveLeftMino,
-            right: game.moveRightMino,
-            down:  game.startDownMino,
-        }
-
-        let onKeyUp = {
-            down: game.stopDownMino
-        }
-
-        Object.keys(onKeyDown).forEach(k => {
-            let code = Config.keyElTable[k].code;
-            let $el = document.getElementById(Config.keyElTable[k].el);
-            let kd = onKeyDown[k];
-
-            $el.onclick = () => { if (game.playStatus) { kd(game); } }
-
-            let keyDown = (e) => {
-                if (game.playStatus && e.code == code) { 
-                    $el.classList.add('is-active');
-                    kd(game);
-                }
-            }
-
-            let keyUp = (e) => {
-                if(game.playStatus && e.code == code) {
-                    $el.classList.remove('is-active');
-                    if(onKeyUp[k]) {
-                        onKeyUp[k](game);
-                    }
-                }
-            }
-
-            removeEventListener('keydown', keyDown, false);
-            removeEventListener('keyup', keyUp, false);
-            addEventListener('keydown', keyDown, false);
-            addEventListener('keyup', keyUp, false);
-        });
     }
 }
 

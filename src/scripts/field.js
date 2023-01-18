@@ -1,10 +1,13 @@
-import Config from './config.js';
 import Block from './block.js';
 
 const Field = class Field {
     table;
     clearedRows;
     game;
+
+    static X = 10;
+    static Y = 20;
+    static OVER_Y = 2;
 
     constructor(game) {
         this.game = game;
@@ -15,14 +18,14 @@ const Field = class Field {
 
     initTable() {
         this.table = [];
-        for (let y = 0; y < Config.fieldY + Config.overY; y++) {
+        for (let y = 0; y < Field.Y + Field.OVER_Y; y++) {
             this.table.push(this.blankRow());
         }
     }
 
     blankRow() {
         let row = [];
-        for (let x=0; x < Config.fieldX;x++) { 
+        for (let x=0; x < Field.X;x++) { 
             row.push(null);
         }
         return row
@@ -82,7 +85,7 @@ const Field = class Field {
                 row.forEach((b, x) => {
                     if(b){ 
                         let attr = {...b.attr, ...{
-                            y: b.size * (Config.fieldY - y - 1)
+                            y: b.size * (Field.Y - y - 1)
                         }};
                         table[y][x] = new Block(attr);
                     }
@@ -119,7 +122,7 @@ const Field = class Field {
     }
 
     isOver() {
-        return this.table[Config.fieldY].some(b => b)
+        return this.table[Field.Y].some(b => b)
     }
 
 }

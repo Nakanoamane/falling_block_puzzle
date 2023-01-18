@@ -1,33 +1,35 @@
-const speedMax = 10;
-const speedMin = 0;
-const dropSpeed = 1000;
-const adjast = 1.3;
-
 const Speed = class Speed {
     $speed
     multiplier;
 
+    static MAX = 10;
+    static MIN = 0;
+    static DEFAULT = 1000;
+    static STEP = (this.DEFAULT - 80) / this.MAX;
+
     constructor() {
         this.$speed = document.getElementById('speed');
-        this.multiplier = speedMin;
+        this.multiplier = Speed.MIN;
         this.write();
     }
 
     get ms() {
-        if(this.multiplier){
-            return dropSpeed / (adjast ** this.multiplier )
-        } else {
-            return dropSpeed
-        }
+        return Speed.DEFAULT - (Speed.STEP * this.multiplier )
     }
 
-    static get maxMs() {
-        let def = dropSpeed / speedMax;
+    get waitMs() {
+        let ms = this.ms
+        let min = Speed.DEFAULT / 2
+        return ms > min ? ms : min
+    }
+
+    get maxMs() {
+        let def = Speed.DEFAULT - (Speed.STEP * Speed.MAX);
         return this.ms < def ? this.ms : def
     }
 
     update() {
-        if(this.multiplier >= speedMax){
+        if(this.multiplier >= Speed.MAX){
             this.multiplier = 0
 
         } else {
