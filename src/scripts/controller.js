@@ -1,12 +1,18 @@
 import { Mino } from './mino.js'
+import Strage from './storage.js'
 
 const Controller = class Controller {
     $menu;
+    $result;
     $btnContinue;
     $btnNewGame;
     $themeColor;
     $minoColor;
     $minos = {};
+
+    themeColor = 'basic';
+    minoColor = 'basic';
+
     game;
 
     static KEY_EL_TABLE = {
@@ -23,13 +29,14 @@ const Controller = class Controller {
     constructor(game){
         this.game = game;
         this.getElements();
-        this.setMinoColors('basic');
+        this.setMinoColors(this.minoColor);
         this.setEvents();
         this.setKeyEvents();
     }
 
     getElements(){
         this.$menu = document.getElementById('menu');
+        this.$result = document.getElementById('result');
         this.$btnContinue = document.getElementById('btnContinue');
         this.$btnNewGame = document.getElementById('btnNewGame');
         this.$themeColor = document.getElementById('themeColor');
@@ -41,6 +48,8 @@ const Controller = class Controller {
 
     setMinoColors(value) {
         this.changeColors('mino', value);
+        this.minoColor = value;
+
         Mino.TYPES.forEach(m => {
             let style = window.getComputedStyle(this.$minos[m]);
             this.game.minoColors[m] = style.getPropertyValue('color');
@@ -74,10 +83,13 @@ const Controller = class Controller {
 
         this.$themeColor.onchange = (e) => {
             this.changeColors('theme', e.target.value);
+            this.themeColor = e.target.value
+            new Strage(this.game).save();
         }
 
         this.$minoColor.onchange = (e) => {
             this.setMinoColors(e.target.value);
+            new Strage(this.game).save();
         }
     }
 

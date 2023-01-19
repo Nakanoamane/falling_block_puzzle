@@ -1,4 +1,5 @@
 import Controller from './controller.js';
+import Strage from './storage.js';
 import Field from './field.js';
 import Timer from './timer.js';
 import Speed from './speed.js';
@@ -10,7 +11,7 @@ const Game = class Game {
     ctxs = {};
 
     playStatus = false;
-    ishold = false;
+    isHold = false;
     controller;
     score;
     timer;
@@ -26,6 +27,7 @@ const Game = class Game {
     constructor() {
         this.controller = new Controller(this);
         this.getElements();
+        new Strage(this).load()
     }
 
     getElements(){
@@ -122,31 +124,42 @@ const Game = class Game {
         this.field = new Field(this);
 
         this.score = new Score();
+        this.score.best = Strage.getBestScore();
         this.speed = new Speed();
         if(this.timer) { this.timer.clear(); }
         this.timer = new Timer();   
-
-        this.clearMinos();
-        this.setMinos();
     }
 
     new() {
         this.init();
+        this.clearMinos();
+        this.setMinos();
+
         this.play();
         
         this.controller.$btnContinue.disabled = false;
+        this.controller.$result.style.display = 'none';
     }
 
     over() {
+        this.stop();
         this.controller.$btnContinue.disabled = true;
-        this.pouse(this);
+        this.score.writeResult();
+        new Strage(this).save();
+        this.controller.$result.style.display = 'block';
+        this.controller.$menu.style.display = 'flex';
     };
 
     pouse(game) {
-        game.playStatus = false;
+        game.stop();
+        new Strage(game).save();
         game.controller.$menu.style.display = 'flex';
-        game.timer.clear();
-        game.current.clearAutoDrop();
+    }
+
+    stop () {
+        this.playStatus = false;
+        this.timer.clear();
+        this.current.clearAutoDrop();
     }
 
     holdMino(game) {

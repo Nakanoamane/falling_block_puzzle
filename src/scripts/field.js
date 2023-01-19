@@ -35,7 +35,6 @@ const Field = class Field {
         this.table.forEach(row => {
             row.forEach(block => {
                 if(block) { block.write() }
-                
             });
         });
     }

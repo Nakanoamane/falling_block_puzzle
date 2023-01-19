@@ -1,6 +1,5 @@
 import Field from './field.js';
 import Block from './block.js';
-import Speed from './speed.js';
 
 const Mino = class Mino {
     game;
@@ -431,7 +430,7 @@ const CurrentMino = class CurrentMino extends Mino {
 
         if(this.game.field.isOver()) {
             this.game.over();
-        }else {
+        } else {
             this.game.isHold = false;
             this.game.setNextMinos();
         }
