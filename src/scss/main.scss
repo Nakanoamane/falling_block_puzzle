@@ -153,8 +153,8 @@ html {
 body {
     display: flex;
     width: 100%;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    height: 100%;
+    max-height: -webkit-fill-available;
     align-items: center;
     justify-content: center;
 }
@@ -494,9 +494,9 @@ button, select {
 // for responsive
 @media screen and (max-width: 600px) {
     .container {
-        max-height: calc(100vh - 20px);
-        width: auto;
-        height: 100%;
+        max-height: calc(160vw - 20px);
+        max-width: calc(62.5vh - 20px);
+        height: calc(100% - 20px);
         aspect-ratio: 5/8;
         display: grid; 
         grid-template-columns: 15fr 32fr 16fr 15fr; 
