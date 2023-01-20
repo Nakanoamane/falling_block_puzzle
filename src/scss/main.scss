@@ -497,6 +497,7 @@ button, select {
         max-height: calc(160vw - 20px);
         max-width: calc(62.5vh - 20px);
         height: calc(100% - 20px);
+        height: -webkit-fill-available;
         aspect-ratio: 5/8;
         display: grid; 
         grid-template-columns: 15fr 32fr 16fr 15fr; 
