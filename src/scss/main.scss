@@ -210,10 +210,6 @@ button, select {
         }
         &.is-field { 
             grid-area: field; 
-            aspect-ratio: 1/2;
-            height: auto;
-            width: 100%;
-            margin: 0 auto;
         }
         &.is-next { 
             grid-area: next; 
@@ -497,7 +493,7 @@ button, select {
         max-height: calc(160vw - 20px);
         max-width: calc(62.5vh - 20px);
         width: auto;
-        height: calc(100% - 20px);
+        height: 100%;
         aspect-ratio: 13/21;
         display: grid; 
         grid-template-columns: 15fr 32fr 16fr 15fr; 
