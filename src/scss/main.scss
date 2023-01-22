@@ -208,7 +208,13 @@ button, select {
             margin-right: 10px;
             @include verticalCenter();
         }
-        &.is-field { grid-area: field; }
+        &.is-field { 
+            grid-area: field; 
+            aspect-ratio: 1/2;
+            height: 100%;
+            width: auto;
+            margin: 0 auto;
+        }
         &.is-next { 
             grid-area: next; 
             margin: 0 0 10px 10px;;
@@ -599,10 +605,6 @@ button, select {
             }
             &.is-contR { 
                 margin: 5px 0 0;
-            }
-            &_field {
-                width: auto;
-                height: 100%;
             }
             &_arrow {
                 margin: 1% 0 3%;
