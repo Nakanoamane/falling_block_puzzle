@@ -493,21 +493,25 @@ button, select {
         max-width: calc(62.5vh - 20px);
         width: auto;
         height: calc(100% - 20px);
-        aspect-ratio: 5/8;
+        aspect-ratio: 13/21;
         display: grid; 
         grid-template-columns: 15fr 32fr 16fr 15fr; 
-        grid-template-rows: 15fr 41fr 40fr 29fr; 
+        grid-template-rows: 15fr 41fr 41fr 29fr; 
         gap: 0px 0px; 
         grid-template-areas: 
         "hold field field next"
         "score field field future"
         "timer field field speed"
-        "contL contL contR contR"; 
+        "contL contL contR contR";
 
         &_column {
 
+            &.is-hold {
+                margin: 0 5px 5px 0;
+            }
             &.is-score, &.is-timer {
                 writing-mode: vertical-rl;
+                margin: 0 5px 5px 0;
 
                 .container_column_title {
                     top: 3px;
@@ -518,11 +522,8 @@ button, select {
                     padding: 10% 15% 10% 0;
                 }
             }
-            &.is-timer { 
-                margin-bottom:  0;
-            }
             &.is-contL { 
-                margin-top: 10px;
+                margin: 0 5px 0 0;
                 flex-direction: row;
                 padding: 2% 0;
 
@@ -561,16 +562,28 @@ button, select {
                 order: 3;
             }
             &.is-field {
+                aspect-ratio: 1/2;
+
                 .container_column_canvas {
                     height: 100%;
-                    width: auto;                   
+                    width: auto;
+                    aspect-ratio: 1/2;
+                    object-fit: contain;
                 }
             }
+            &.is-next {
+                margin: 0 0 5px 5px;
+            }
             &.is-future { 
-                padding: 30% 24% 0;
+                margin:  0 0 5px 5px;
+                padding: 18% 24% 0;
+
+                &::before {
+                    top: 3.2%;
+                }
             }
             &.is-speed { 
-                margin-bottom: 0;
+                margin: 0 0 5px 5px;
                 padding: 5px;
     
                 .el_title {
@@ -581,7 +594,7 @@ button, select {
                 }
             }
             &.is-contR { 
-                margin-top: 10px;
+                margin: 0;
             }
             &_arrow {
                 margin: 1% 0 3%;
