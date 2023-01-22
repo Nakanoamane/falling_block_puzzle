@@ -8,9 +8,10 @@
 
         .bg-field {
             background-color: map-get($colors, field);
-            background-image: linear-gradient(0deg, map-get($colors, grid) 1%, transparent 2%,transparent 99%, map-get($colors, grid) 100%), 
-            linear-gradient(90deg, map-get($colors, grid) 1%, transparent 2%,transparent 99%, map-get($colors, grid) 100%);
+            background-image: linear-gradient(0deg, map-get($colors, grid) 1%, transparent 2%, transparent 99%, map-get($colors, grid) 100%), 
+            linear-gradient(90deg, map-get($colors, grid) 1%, transparent 2%, transparent 99%, map-get($colors, grid) 100%);
             background-size: 10% 5%;
+            background-repeat: round;
             position: relative;
 
             &::before {
