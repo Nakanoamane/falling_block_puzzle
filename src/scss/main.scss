@@ -357,6 +357,17 @@ button, select {
             justify-content: space-around;
             align-items: center;
         }
+        &_field {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1/2;
+
+            .el_canvas {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+        }
         &_menu {
             position: absolute;
             top: 0;
