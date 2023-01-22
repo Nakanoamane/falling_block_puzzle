@@ -492,6 +492,14 @@ button, select {
 
 // for responsive
 @media screen and (max-width: 600px) {
+    html {
+        height: -webkit-fill-available;
+    }
+
+    body {
+        height: -webkit-fill-available;
+    }
+
     .container {
         aspect-ratio: 13/21;
         display: grid; 
