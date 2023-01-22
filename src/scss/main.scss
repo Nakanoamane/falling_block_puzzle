@@ -346,11 +346,15 @@ button, select {
             padding-top: 25%;
             font-size: 20px;
         }
-
         &_turn {
             display: flex;
             justify-content: space-around;
             align-items: center;
+        }
+        &_field {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/2;
         }
         &_menu {
             position: absolute;
@@ -496,7 +500,7 @@ button, select {
         aspect-ratio: 13/21;
         display: grid; 
         grid-template-columns: 15fr 32fr 16fr 15fr; 
-        grid-template-rows: 15fr 41fr 41fr 29fr; 
+        grid-template-rows: 15fr 41fr 40fr 30fr; 
         gap: 0px 0px; 
         grid-template-areas: 
         "hold field field next"
@@ -522,8 +526,11 @@ button, select {
                     padding: 10% 15% 10% 0;
                 }
             }
-            &.is-contL { 
+            &.is-timer {
                 margin: 0 5px 0 0;
+            }
+            &.is-contL { 
+                margin: 5px 5px 0 0;
                 flex-direction: row;
                 padding: 2% 0;
 
@@ -561,17 +568,12 @@ button, select {
             &_turn {
                 order: 3;
             }
-            &.is-field {
+            &.is-field .container_column_canvas {
                 height: auto;
                 width: 100%;
                 aspect-ratio: 1/2;
-
-                .container_column_canvas {
-                    height: 100%;
-                    width: 100%;
-                    aspect-ratio: 1/2;
-                    object-fit: contain;
-                }
+                object-fit: contain;
+            
             }
             &.is-next {
                 margin: 0 0 5px 5px;
@@ -585,7 +587,7 @@ button, select {
                 }
             }
             &.is-speed { 
-                margin: 0 0 5px 5px;
+                margin: 0 0 0 5px;
                 padding: 5px;
     
                 .el_title {
@@ -596,7 +598,7 @@ button, select {
                 }
             }
             &.is-contR { 
-                margin: 0;
+                margin: 5px 0 0;
             }
             &_arrow {
                 margin: 1% 0 3%;
