@@ -492,8 +492,6 @@ button, select {
     .container {
         max-height: calc(160vw - 20px);
         max-width: calc(62.5vh - 20px);
-        width: auto;
-        height: 100%;
         aspect-ratio: 13/21;
         display: grid; 
         grid-template-columns: 15fr 32fr 16fr 15fr; 
@@ -565,11 +563,8 @@ button, select {
             &_turn {
                 order: 3;
             }
-            &.is-field .container_column_canvas {
-                height: auto;
-                width: 100%;
-                aspect-ratio: 1/2;
-                object-fit: contain;
+            &.is-field {
+
             }
             &.is-next {
                 margin: 0 0 5px 5px;
