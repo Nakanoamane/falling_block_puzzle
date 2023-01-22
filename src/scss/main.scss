@@ -211,8 +211,8 @@ button, select {
         &.is-field { 
             grid-area: field; 
             aspect-ratio: 1/2;
-            height: 100%;
-            width: auto;
+            height: auto;
+            width: 100%;
             margin: 0 auto;
         }
         &.is-next { 
@@ -570,8 +570,8 @@ button, select {
                 order: 3;
             }
             &.is-field .container_column_canvas {
-                height: 100%;
-                width: auto;
+                height: auto;
+                width: 100%;
                 aspect-ratio: 1/2;
                 object-fit: contain;
             }
