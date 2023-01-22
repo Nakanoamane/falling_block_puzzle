@@ -600,6 +600,10 @@ button, select {
             &.is-contR { 
                 margin: 5px 0 0;
             }
+            &_field {
+                width: auto;
+                height: 100%;
+            }
             &_arrow {
                 margin: 1% 0 3%;
 
