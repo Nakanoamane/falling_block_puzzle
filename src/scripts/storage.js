@@ -42,10 +42,12 @@ const Strage = class Strage {
         if (!str) { return }
         let json = JSON.parse(str);
 
-        let themeColor = json.themeColor
-        this.game.controller.themeColor = themeColor
-        this.game.controller.changeColors('theme', themeColor)
+        this.game.controller.themeColor = json.themeColor
+        this.game.controller.changeColors('theme', json.themeColor)
+        this.game.controller.$themeColor.value = json.themeColor
+
         this.game.controller.setMinoColors(json.minoColor)
+        this.game.controller.$minoColor.value = json.minoColor
         if(!json.field) { return }
 
         this.game.isHold = json.isHold
