@@ -156,6 +156,7 @@ body {
     height: 100vh;
     align-items: center;
     justify-content: center;
+    padding: 10px;
 }
 
 button, select {
@@ -173,11 +174,9 @@ button, select {
 }
 
 .container {
-    width: 100%;
-    max-height: calc(100vw - 20px);
-    max-width: calc(100vh - 20px);
+    width: auto;
+    height: 100%;
     aspect-ratio: 1/1;
-    margin: 10px;
     display: grid;
     grid-template-columns: 4fr 8fr 2fr 2fr;
     grid-template-rows: 6fr 3fr 3fr 3fr 3fr 4fr; 
@@ -494,8 +493,6 @@ button, select {
 // for responsive
 @media screen and (max-width: 600px) {
     .container {
-        max-height: calc(160vw - 20px);
-        max-width: calc(62.5vh - 20px);
         aspect-ratio: 13/21;
         display: grid; 
         grid-template-columns: 15fr 32fr 16fr 15fr; 
