@@ -562,11 +562,14 @@ button, select {
                 order: 3;
             }
             &.is-field {
+                height: auto;
+                width: 100%;
                 aspect-ratio: 1/2;
+                margin-bottom: 5px;
 
                 .container_column_canvas {
                     height: 100%;
-                    width: auto;
+                    width: 100%;
                     aspect-ratio: 1/2;
                     object-fit: contain;
                 }
